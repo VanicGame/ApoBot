@@ -1,4 +1,3 @@
 typing
 discord
-random
 configparser
