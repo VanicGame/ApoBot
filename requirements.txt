@@ -1,0 +1,4 @@
+typing
+discord
+random
+configparser
