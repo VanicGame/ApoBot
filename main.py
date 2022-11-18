@@ -53,19 +53,5 @@ async def panel(ctx, t, *, s):
 	embed = FastEmbed(t, s)
 	await ctx.send(embed = embed)
 
-#Панель на вебхук
-async def has_roles(ctx):
-	for i in ctx.author.roles:
-		if i.id == ROLES["admin"] or i.id == ROLES["owner"]:
-			return True
-	return False
-@client.command()
-@commands.check(has_roles)
-async def web_panel(ctx, name, t, *, s):
-	#await ctx.message.delete()
-	webhook = Webhook.from_url("https://discord.com/api/webhooks/1043223473008431164/c0rIYbTQB1qhppWVV4498fg8l43wt2Jv2zLqvP3VARgWKQSxH5x2NaDfHL_hWp3wxivT")
-	embed = FastEmbed(t, s)
-	await webhook.send(embed = embed, username = "Заря-17", avatar_url = "https://cdn.discordapp.com/attachments/993905008766623765/1033682524691513364/IMG_20221022_142342.jpg")
-
 # Запуск
 client.run(TOKEN)
