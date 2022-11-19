@@ -27,6 +27,13 @@ def FastEmbed(titl, desc):
 	)
 	return embed
 
+# Проверка на администрацию
+async def has_roles(ctx):
+	for i in ctx.author.roles:
+		if i.id == ROLES["admin"] or i.id == ROLES["owner"]:
+			return True
+	return False
+
 # Инициализация бота
 intents = discord.Intents.all()
 intents.members = True
@@ -41,11 +48,6 @@ async def ping(ctx):
 	await ctx.send("pong!")
 
 # Панель
-async def has_roles(ctx):
-	for i in ctx.author.roles:
-		if i.id == ROLES["admin"] or i.id == ROLES["owner"]:
-			return True
-	return False
 @client.command()
 @commands.check(has_roles)
 async def panel(ctx, t, *, s):
