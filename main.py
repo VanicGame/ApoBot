@@ -51,9 +51,29 @@ async def ping(ctx):
 @client.command()
 @commands.check(has_roles)
 async def panel(ctx, t, *, s):
+	"""
+	Вызвать панель от имени бота
+	"""
 	await ctx.message.delete()
 	embed = FastEmbed(t, s)
 	await ctx.send(embed = embed)
+
+# Ролл (12)
+@client.command()
+async def dice(ctx, modif: typing.Optional[int] = 0):
+	"""
+	Кинуть 12-гранный кубик
+	"""
+	dice = random.randint(1, 12)
+	if (modif >= -11) and (modif <= 11):
+		result = dice + modif
+		if result < 1:
+			result = 1
+		if result > 12:
+			result = 12
+		await ctx.send(embed = FastEmbed('Dice', '<:dice:871337451627638814> ' + str(result)))
+	else:
+		await ctx.send(embed = FastEmbed('Error', 'Модификатор не может быть меньше -11 и больше 11'))
 
 # Запуск
 client.run(TOKEN)
