@@ -3,6 +3,7 @@ import discord
 from discord.ext import commands
 import random
 from discord import Webhook
+import os
 
 # Получение конфигов
 import configparser
@@ -11,7 +12,7 @@ config = configparser.ConfigParser()
 config.read("config.ini")
 
 # Константы
-TOKEN = config["bot_settings"]["token"]
+TOKEN = os.getenv("TOKEN")
 PREFIX = config["bot_settings"]["prefix"]
 ROLES = {
 	"admin" : 1033250677301985321,
