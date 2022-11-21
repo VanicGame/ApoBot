@@ -1,3 +1,5 @@
 typing
 discord
 configparser
+flask
+threading
