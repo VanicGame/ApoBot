@@ -87,6 +87,5 @@ async def dice(ctx, modif: typing.Optional[int] = 0):
 	else:
 		await ctx.send(embed = FastEmbed('Error', 'Модификатор не может быть меньше -11 и больше 11'))
 
-#keep_alive()
 # Запуск
 client.run(TOKEN)
