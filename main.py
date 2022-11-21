@@ -4,6 +4,7 @@ from discord.ext import commands
 import random
 from discord import Webhook
 import os
+from keep_alive import keep_alive
 
 # Получение конфигов
 import configparser
@@ -76,5 +77,6 @@ async def dice(ctx, modif: typing.Optional[int] = 0):
 	else:
 		await ctx.send(embed = FastEmbed('Error', 'Модификатор не может быть меньше -11 и больше 11'))
 
+keep_alive()
 # Запуск
 client.run(TOKEN)
