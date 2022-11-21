@@ -4,7 +4,6 @@ from discord.ext import commands
 import random
 from discord import Webhook
 import os
-from keep_alive import keep_alive
 
 # Получение конфигов
 import configparser
@@ -59,6 +58,17 @@ async def panel(ctx, t, *, s):
 	await ctx.message.delete()
 	embed = FastEmbed(t, s)
 	await ctx.send(embed = embed)
+
+# Панель
+@client.command()
+@commands.check(has_roles)
+async def news(ctx, ping: typing.Optional[int] = 0, *, s):
+	"""
+	Написать новость
+	"""
+	await ctx.message.delete()
+	embed = FastEmbed("Новости", s)
+	await ctx.send("<@1032289885777842186>", embed = embed)
 
 # Ролл (12)
 @client.command()
