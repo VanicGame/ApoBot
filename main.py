@@ -68,7 +68,7 @@ async def news(ctx, ping: typing.Optional[int] = 0, *, s):
 	"""
 	await ctx.message.delete()
 	embed = FastEmbed("Новости", s)
-	await ctx.send("<@&1032289885777842186>", embed = embed)
+	await ctx.send(embed = embed)
 
 # Ролл (12)
 @client.command()
