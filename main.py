@@ -44,6 +44,40 @@ print("START")
 
 # Основной код
 
+# Приветственное сообщение
+async def send_hello(member):
+	guild = member.guild
+	embed = discord.Embed(
+		title = "Приветствуем!",
+		description = """*Добро пожаловать, {0.mention}!
+		Ты присоединился к серверу {1.name}.
+		Если есть вопросы, можешь задать их администрации.*""".format(member, guild),
+		colour = 0xFFE4B5
+	)
+	channel = guild.get_channel(957338148696899636) # Основной чат
+	if channel  is not None:
+		await channel.send(embed=embed)
+
+@client.event
+async def on_member_join(member):
+	await send_hello(member)
+
+# Приветственное сообщение
+@client.command()
+@commands.check(has_roles)
+async def say_hello(ctx, member: discord.Member):
+	"""
+	Поприветствовать участника
+	"""
+	await send_hello(member)
+@say_hello.error
+async def no_error(ctx, error):
+    await ctx.message.delete()
+    if isinstance(error, commands.BadArgument):
+        await ctx.send('Участник указан неверно!', delete_after = 5)
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send('Укажите участника!', delete_after = 5)
+
 # Пинг
 @client.command()
 async def ping(ctx):
