@@ -14,6 +14,7 @@ config.read("config.ini")
 
 # Константы
 TOKEN = os.getenv("TOKEN")
+BOT_STATUS = os.getenv("BOT_STATUS")
 PREFIX = config["bot_settings"]["prefix"]
 ROLES = {
 	"admin" : 1033250677301985321,
@@ -44,14 +45,24 @@ print("START")
 
 # Основной код
 
+@client.event
+async def on_ready():
+	print("On ready!")
+	await client.change_presence(activity=discord.Game(BOT_STATUS))
+
 # Приветственное сообщение
 async def send_hello(member):
 	guild = member.guild
 	embed = discord.Embed(
 		title = "Приветствуем!",
 		description = """*Добро пожаловать, {0.mention}!
-		Ты присоединился к серверу {1.name}.
-		Если есть вопросы, можешь задать их администрации.*""".format(member, guild),
+Ты присоединился(ась) к серверу **{1.name}**.
+Мы рады встретить тебя здесь!
+Важные каналы, которые мы советуем прочесть:
+- [правила](https://discord.com/channels/957338147577012224/957549748561256548), чтобы соблюдать атмосферу.
+- [лор](https://discord.com/channels/957338147577012224/974290508010639360), чтобы быть вкурсе событий.
+- [механики](https://discord.com/channels/957338147577012224/1001868191682801734), чтобы понять наши фишки.
+Если есть вопросы, можешь задать их администрации.*""".format(member, guild),
 		colour = 0xFFE4B5
 	)
 	channel = guild.get_channel(957338148696899636) # Основной чат
