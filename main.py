@@ -17,7 +17,7 @@ TOKEN = os.getenv("TOKEN")
 BOT_STATUS = os.getenv("BOT_STATUS")
 PREFIX = config["bot_settings"]["prefix"]
 ROLES = {
-	"admin" : 1033250677301985321,
+	"admin" : 1045562587934375998,
 	"owner" : 957338377030598736,
 }
 
@@ -65,7 +65,7 @@ async def send_hello(member):
 Если есть вопросы, можешь задать их администрации.*""".format(member, guild),
 		colour = 0xFFE4B5
 	)
-	channel = guild.get_channel(957338148696899636) # Основной чат
+	channel = guild.get_channel(1046377785792405544) # Основной чат
 	if channel  is not None:
 		await channel.send(embed=embed)
 
