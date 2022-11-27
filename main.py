@@ -22,11 +22,11 @@ ROLES = {
 }
 
 # Функции
-def FastEmbed(titl, desc):
+def FastEmbed(titl, desc, colour: typing.Optional[int] = 0xff99ff):
 	embed = discord.Embed(
 		title = titl,
 		description = desc,
-		colour = 0xff99ff
+		colour = colour
 	)
 	return embed
 
@@ -83,24 +83,24 @@ async def say_hello(ctx, member: discord.Member):
 	await send_hello(member)
 @say_hello.error
 async def no_error(ctx, error):
-    await ctx.message.delete()
-    if isinstance(error, commands.BadArgument):
-        await ctx.send('Участник указан неверно!', delete_after = 5)
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send('Укажите участника!', delete_after = 5)
+	await ctx.message.delete()
+	if isinstance(error, commands.BadArgument):
+		await ctx.send('Участник указан неверно!', delete_after = 5)
+	if isinstance(error, commands.MissingRequiredArgument):
+		await ctx.send('Укажите участника!', delete_after = 5)
 
 # Пинг
 @client.command()
 async def ping(ctx):
-    if round(client.latency * 1000) <= 50:
-        embed=discord.Embed(title="Ping", description=f":ping_pong: Pong! The ping is **{round(client.latency *1000)}** milliseconds!", color=0x44ff44)
-    elif round(client.latency * 1000) <= 100:
-        embed=discord.Embed(title="Ping", description=f":ping_pong: Pong! The ping is **{round(client.latency *1000)}** milliseconds!", color=0xffd000)
-    elif round(client.latency * 1000) <= 200:
-        embed=discord.Embed(title="Ping", description=f":ping_pong: Pong! The ping is **{round(client.latency *1000)}** milliseconds!", color=0xff6600)
-    else:
-        embed=discord.Embed(title="Ping", description=f":ping_pong: Pong! The ping is **{round(client.latency *1000)}** milliseconds!", color=0x990000)
-    await ctx.send(embed=embed)
+	if round(client.latency * 1000) <= 50:
+		embed=discord.Embed(title="Ping", description=f":ping_pong: Pong! The ping is **{round(client.latency *1000)}** milliseconds!", color=0x44ff44)
+	elif round(client.latency * 1000) <= 100:
+		embed=discord.Embed(title="Ping", description=f":ping_pong: Pong! The ping is **{round(client.latency *1000)}** milliseconds!", color=0xffd000)
+	elif round(client.latency * 1000) <= 200:
+		embed=discord.Embed(title="Ping", description=f":ping_pong: Pong! The ping is **{round(client.latency *1000)}** milliseconds!", color=0xff6600)
+	else:
+		embed=discord.Embed(title="Ping", description=f":ping_pong: Pong! The ping is **{round(client.latency *1000)}** milliseconds!", color=0x990000)
+	await ctx.send(embed=embed)
 
 # Панель
 @client.command()
@@ -140,6 +140,19 @@ async def dice(ctx, modif: typing.Optional[int] = 0):
 		await ctx.send(embed = FastEmbed('Dice', '<:dice:871337451627638814> ' + str(result)))
 	else:
 		await ctx.send(embed = FastEmbed('Error', 'Модификатор не может быть меньше -11 и больше 11'))
+
+# Ролл (6/6)
+@client.command()
+async def dice2(ctx):
+	"""
+	Кинуть два 6-гранных кубика
+	"""
+	dice1 = random.randint(1, 6)
+	dice2 = random.randint(1, 6)
+	if dice1 == dice2:
+		await ctx.send(embed = FastEmbed('Dice', '<:dice:871337451627638814> ' + str(dice1) + " | " + str(dice2), 0xfff68f))
+	else:
+		await ctx.send(embed = FastEmbed('Dice', '<:dice:871337451627638814> ' + str(dice1) + " | " + str(dice2), 0xe48e6b))
 
 # Запуск
 keep_alive()
