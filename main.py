@@ -92,7 +92,15 @@ async def no_error(ctx, error):
 # Пинг
 @client.command()
 async def ping(ctx):
-	await ctx.send("pong!")
+    if round(client.latency * 1000) <= 50:
+        embed=discord.Embed(title="Ping", description=f":ping_pong: Pong! The ping is **{round(client.latency *1000)}** milliseconds!", color=0x44ff44)
+    elif round(client.latency * 1000) <= 100:
+        embed=discord.Embed(title="Ping", description=f":ping_pong: Pong! The ping is **{round(client.latency *1000)}** milliseconds!", color=0xffd000)
+    elif round(client.latency * 1000) <= 200:
+        embed=discord.Embed(title="Ping", description=f":ping_pong: Pong! The ping is **{round(client.latency *1000)}** milliseconds!", color=0xff6600)
+    else:
+        embed=discord.Embed(title="Ping", description=f":ping_pong: Pong! The ping is **{round(client.latency *1000)}** milliseconds!", color=0x990000)
+    await ctx.send(embed=embed)
 
 # Панель
 @client.command()
