@@ -15,7 +15,7 @@ config.read("config.ini")
 # Константы
 TOKEN = os.getenv("TOKEN")
 BOT_STATUS = os.getenv("BOT_STATUS")
-PREFIX = config["bot_settings"]["prefix"]
+PREFIX = os.getenv("PREFIX")
 ROLES = {
 	"admin" : 1045562587934375998,
 	"owner" : 957338377030598736,
