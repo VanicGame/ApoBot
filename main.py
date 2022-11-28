@@ -4,6 +4,7 @@ from discord.ext import commands
 import random
 from discord import Webhook
 import os
+import loot
 from keep_alive import keep_alive
 
 # Получение конфигов
@@ -19,6 +20,8 @@ PREFIX = os.getenv("PREFIX")
 ROLES = {
 	"admin" : 1045562587934375998,
 	"owner" : 957338377030598736,
+	"player" : 957569446896082954,
+	"member" : 957491586479050762,
 }
 
 # Функции
@@ -105,24 +108,36 @@ async def ping(ctx):
 # Панель
 @client.command()
 @commands.check(has_roles)
-async def panel(ctx, t, *, s):
+async def panel(ctx, title, *, desc):
 	"""
 	Вызвать панель от имени бота
 	"""
 	await ctx.message.delete()
-	embed = FastEmbed(t, s)
+	embed = FastEmbed(title, desc)
+	if ctx.message.attachments != []:
+		embed.set_image(url = ctx.message.attachments[0].url)
 	await ctx.send(embed = embed)
 
-# Панель
+# Новости
 @client.command()
 @commands.check(has_roles)
-async def news(ctx, ping: typing.Optional[int] = 0, *, s):
+async def news(ctx, ping: typing.Optional[int] = 0, *, desc):
 	"""
 	Написать новость
+	ping = 1, если надо упомянуть игроков.
+	ping = 2, если надо упомянуть всех.
 	"""
 	await ctx.message.delete()
-	embed = FastEmbed("Новости", s)
-	await ctx.send(embed = embed)
+	embed = FastEmbed("Новости", desc, 0x97FFFF)
+	if ctx.message.attachments != []:
+		print(ctx.message.attachments)
+		embed.set_image(url = ctx.message.attachments[0].url)
+	if ping == 1:
+		await ctx.send("<@&"+str(ROLES["player"])+">",embed = embed)
+	elif ping == 2:
+		await ctx.send("<@&"+str(ROLES["member"])+">",embed = embed)
+	else:
+		await ctx.send(embed = embed)
 
 # Ролл (12)
 @client.command()
@@ -153,6 +168,14 @@ async def dice2(ctx):
 		await ctx.send(embed = FastEmbed('Dice', '<:dice:871337451627638814> ' + str(dice1) + " | " + str(dice2), 0xfff68f))
 	else:
 		await ctx.send(embed = FastEmbed('Dice', '<:dice:871337451627638814> ' + str(dice1) + " | " + str(dice2), 0xe48e6b))
+
+@client.command(aliases=['loot-eat', 'l-eat', 'loot-e'])
+async def looteat(ctx):
+	await loot.loot_eat(ctx)
+
+@client.command(aliases=['loot-weapon', 'loot-weap', 'l-weapon', 'l-weap', 'loot-w'])
+async def lootweapon(ctx):
+	await loot.loot_weapon(ctx)
 
 # Запуск
 keep_alive()
