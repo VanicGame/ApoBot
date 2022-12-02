@@ -2,6 +2,7 @@ import typing
 import discord
 from discord.ext import commands
 import random
+import datetime
 from discord import Webhook
 import os
 import loot
@@ -18,14 +19,14 @@ TOKEN = os.getenv("TOKEN")
 BOT_STATUS = os.getenv("BOT_STATUS")
 PREFIX = os.getenv("PREFIX")
 ROLES = {
-	"admin" : 1045562587934375998,
-	"owner" : 957338377030598736,
-	"player" : 957569446896082954,
-	"member" : 957491586479050762,
+	"council" : 1048120606366900274,
+	"moderator" : 1048145463599177799,
+	"player" : 1048121996103393321,
+	"member" : 1048127249381085226,
 }
 
 # Функции
-def FastEmbed(titl, desc, colour: typing.Optional[int] = 0xff99ff):
+def FastEmbed(titl, desc, colour: typing.Optional[int] = 0xb2ff7e):
 	embed = discord.Embed(
 		title = titl,
 		description = desc,
@@ -36,7 +37,7 @@ def FastEmbed(titl, desc, colour: typing.Optional[int] = 0xff99ff):
 # Проверка на администрацию
 async def has_roles(ctx):
 	for i in ctx.author.roles:
-		if i.id == ROLES["admin"] or i.id == ROLES["owner"]:
+		if i.id == ROLES["council"] or i.id == ROLES["moderator"]:
 			return True
 	return False
 
@@ -62,13 +63,13 @@ async def send_hello(member):
 Ты присоединился(ась) к серверу **{1.name}**.
 Мы рады встретить тебя здесь!
 Важные каналы, которые мы советуем прочесть:
-- [правила](https://discord.com/channels/957338147577012224/957549748561256548), чтобы соблюдать атмосферу.
-- [лор](https://discord.com/channels/957338147577012224/974290508010639360), чтобы быть вкурсе событий.
-- [механики](https://discord.com/channels/957338147577012224/1001868191682801734), чтобы понять наши фишки.
+- [правила](https://discord.com/channels/1048119776662261840/1048122689010810880), чтобы соблюдать атмосферу.
+- [лор](https://discord.com/channels/1048119776662261840/1048121086753124443), чтобы быть вкурсе событий.
 Если есть вопросы, можешь задать их администрации.*""".format(member, guild),
-		colour = 0xFFE4B5
+		colour = 0xb2ff7e 
 	)
-	channel = guild.get_channel(1046377785792405544) # Основной чат
+	await member.add_roles(guild.get_role(ROLES["member"]))
+	channel = guild.get_channel(1048119777291419660) # Основной чат
 	if channel  is not None:
 		await channel.send(embed=embed)
 
@@ -118,6 +119,18 @@ async def panel(ctx, title, *, desc):
 		embed.set_image(url = ctx.message.attachments[0].url)
 	await ctx.send(embed = embed)
 
+@panel.error
+async def panel_error(ctx, error):
+	if isinstance(error, commands.BadArgument):
+		await ctx.send("Напишите заголовок и описание!", delete_after = 5)
+		await ctx.message.delete()
+	if isinstance(error, commands.MissingRequiredArgument):
+		await ctx.send('Напишите заголовок и описание!', delete_after = 5)
+		await ctx.message.delete()
+	if isinstance(error, commands.MissingRole):
+		await ctx.send('У вас нет необходимой роли!', delete_after = 5)
+		await ctx.message.delete()
+
 # Новости
 @client.command()
 @commands.check(has_roles)
@@ -138,6 +151,50 @@ async def news(ctx, ping: typing.Optional[int] = 0, *, desc):
 		await ctx.send("<@&"+str(ROLES["member"])+">",embed = embed)
 	else:
 		await ctx.send(embed = embed)
+
+@news.error
+async def news_error(ctx, error):
+	if isinstance(error, commands.MissingRequiredArgument):
+		await ctx.send('Напишите новость!', delete_after = 5)
+		await ctx.message.delete()
+	if isinstance(error, commands.MissingRole):
+		await ctx.send('У вас нет необходимой роли!', delete_after = 5)
+		await ctx.message.delete()
+
+# Мут
+@client.command()
+async def mute(ctx, member: discord.Member, time, *, reason: typing.Optional[str] = "-"):
+	embed=FastEmbed("Mute", """Участник {0.mention} был отправлен подумать о своем поведении.
+Причина: {1}
+Время: {2}
+	""".format(member, reason, time), 0xdf260b)
+	if time[-1] == "m":
+		time = time[: -1]
+		delta = datetime.timedelta(minutes = int(time))
+	elif time[-1] == "d":
+		time = time[: -1]
+		delta = datetime.timedelta(days = int(time))
+	elif time[-1] == "h":
+		time = time[: -1]
+		delta = datetime.timedelta(hours = int(time))
+	else:
+		await ctx.send('Проверте корректность времени!', delete_after = 5)
+		await ctx.message.delete()
+
+	await member.timeout(delta, reason=reason)
+	await ctx.send(embed=embed)
+
+@mute.error
+async def mute_error(ctx, error):
+	if isinstance(error, commands.BadArgument):
+		await ctx.send("Проверте корректность имени участника", delete_after = 5)
+		await ctx.message.delete()
+	if isinstance(error, commands.MissingRequiredArgument):
+		await ctx.send('Проверте, указан ли участник и время.', delete_after = 5)
+		await ctx.message.delete()
+	if isinstance(error, commands.MissingRole):
+		await ctx.send('У вас нет необходимой роли!', delete_after = 5)
+		await ctx.message.delete()
 
 # Ролл (12)
 @client.command()
