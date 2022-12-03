@@ -42,9 +42,3 @@ def update_eco_table(member_id, balance):
 	cursor.execute("""UPDATE economy SET balance = {0} WHERE id={1};""".format(balance, member_id))
 	abdb.commit()
 	abdb.close()
-
-recreate_table("economy")
-insert_eco_table(1, 1)
-print(get_eco_table(1))
-update_eco_table(1, 20)
-print(get_eco_table(1))

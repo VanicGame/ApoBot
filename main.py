@@ -259,6 +259,31 @@ async def lootweapon(ctx):
 	"""
 	await loot.loot_weapon(ctx)
 
+# Экономика
+@client.command()
+@commands.check(has_roles)
+async def eco_init(ctx):
+	database.recreate_table("economy")
+	print("[!] economy init")
+
+@client.command()
+@commands.check(has_roles)
+async def eco_insert(ctx):
+	database.insert_eco_table(1, 1)
+	print("[!] insert")
+
+@client.command()
+@commands.check(has_roles)
+async def eco_update(ctx, value: int):
+	database.update_eco_table(1, value)
+	print("[!] update")
+
+@client.command()
+@commands.check(has_roles)
+async def eco_print(ctx):
+	print("[!] print")
+	print(database.get_eco_table(1))
+
 # Запуск
 keep_alive()
 client.run(TOKEN)
