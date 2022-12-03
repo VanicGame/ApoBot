@@ -226,12 +226,36 @@ async def dice2(ctx):
 	else:
 		await ctx.send(embed = FastEmbed('Dice', '<:dice:871337451627638814> ' + str(dice1) + " | " + str(dice2), 0xe48e6b))
 
+# Ролл (выбор из списка)
+@client.command()
+async def roll(ctx, *, elements):
+	"""
+	Выбрать случайный элемент из списка.
+	В качестве разделителя используйте ",".
+	"""
+	roll_list = elements.split(",")
+	embed = FastEmbed("Roll", random.choice(roll_list))
+	await ctx.send(embed = embed)
+
+# Искать еду
 @client.command(aliases=['loot-eat', 'l-eat', 'loot-e'])
 async def looteat(ctx):
+	"""
+	Кинуть ролл для поиска еды.
+	Шанс найти что-либо: 50%
+	Шанс того, что искомое испорчено: 50%
+	"""
 	await loot.loot_eat(ctx)
 
+# Искать оружие
 @client.command(aliases=['loot-weapon', 'loot-weap', 'l-weapon', 'l-weap', 'loot-w'])
 async def lootweapon(ctx):
+	"""
+	Кинуть ролл для поиска оружия.
+	Из огнестрельного оружия только пистолет.
+	Шанс найти что-либо: 50%
+	Шанс того, что искомое сломано: 50%
+	"""
 	await loot.loot_weapon(ctx)
 
 # Запуск
