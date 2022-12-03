@@ -7,6 +7,7 @@ from discord import Webhook
 import os
 import loot
 from keep_alive import keep_alive
+import database
 
 # Получение конфигов
 import configparser
