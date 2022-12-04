@@ -96,6 +96,9 @@ async def no_error(ctx, error):
 # Пинг
 @client.command()
 async def ping(ctx):
+	"""
+	Проверить пинг бота
+	"""
 	if round(client.latency * 1000) <= 50:
 		embed=discord.Embed(title="Ping", description=f":ping_pong: Pong! The ping is **{round(client.latency *1000)}** milliseconds!", color=0x44ff44)
 	elif round(client.latency * 1000) <= 100:
@@ -164,6 +167,9 @@ async def news_error(ctx, error):
 # Мут
 @client.command()
 async def mute(ctx, member: discord.Member, time, *, reason: typing.Optional[str] = "-"):
+	"""
+	Отправить участника подумать о своем поведении
+	"""
 	embed=FastEmbed("Mute", """Участник {0.mention} был отправлен подумать о своем поведении.
 Причина: {1}
 Время: {2}
