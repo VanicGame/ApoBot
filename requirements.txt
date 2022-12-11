@@ -1,4 +1,5 @@
 typing
 discord
+DiscordDatabase
 configparser
 flask
