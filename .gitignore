@@ -1,3 +1,4 @@
 /__pycache__
 /.env
 /local_run.py
+/apobotdb.db
